@@ -55,7 +55,8 @@
       const docEl = w.querySelector(".eqDocument");
       w.addEventListener("pointerdown", () => setTimeout(() => input.focus()));
       input.addEventListener("keydown", (e) => {
-        if (e.key.length !== 1) return;
+        // Like older editors, navigation is read from keyCode: arrows, Insert and Delete never type.
+        if ([37, 38, 39, 40, 45, 46].includes(e.keyCode) || e.key.length !== 1) return;
         e.preventDefault();
         docEl.classList.remove("empty");
         docEl.querySelector(".eqCaret").before(e.key);

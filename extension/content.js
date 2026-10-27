@@ -410,10 +410,24 @@
     el.dispatchEvent(new Event("change", { bubbles: true }));
   }
 
+  // US-keyboard key for each symbol: [code, keyCode, needs Shift]. A symbol's own char code is
+  // not its keyCode: "(" is 40 (ArrowDown), "." is 46 (Delete), "-" is 45 (Insert), so editors
+  // that read keyCode would move the cursor or delete instead of typing.
+  const SYMBOL_KEYS = {
+    "(": ["Digit9", 57, true], ")": ["Digit0", 48, true], "^": ["Digit6", 54, true], "*": ["Digit8", 56, true],
+    "!": ["Digit1", 49, true], "%": ["Digit5", 53, true], "+": ["Equal", 187, true], "=": ["Equal", 187, false],
+    "-": ["Minus", 189, false], "_": ["Minus", 189, true], "/": ["Slash", 191, false], ".": ["Period", 190, false],
+    ",": ["Comma", 188, false], "<": ["Comma", 188, true], ">": ["Period", 190, true], " ": ["Space", 32, false],
+    "\\": ["Backslash", 220, false], "|": ["Backslash", 220, true], "[": ["BracketLeft", 219, false],
+    "]": ["BracketRight", 221, false], "{": ["BracketLeft", 219, true], "}": ["BracketRight", 221, true],
+  };
+
   function keyInit(ch) {
-    const code = /[a-z]/i.test(ch) ? "Key" + ch.toUpperCase() : /\d/.test(ch) ? "Digit" + ch : "";
-    const keyCode = /[a-z0-9]/i.test(ch) ? ch.toUpperCase().charCodeAt(0) : ch.charCodeAt(0);
-    return { key: ch, code, keyCode, which: keyCode, bubbles: true, cancelable: true, composed: true };
+    let code = "", keyCode = 0, shiftKey = false;
+    if (/[a-z]/i.test(ch)) [code, keyCode, shiftKey] = ["Key" + ch.toUpperCase(), ch.toUpperCase().charCodeAt(0), ch !== ch.toLowerCase()];
+    else if (/\d/.test(ch)) [code, keyCode] = ["Digit" + ch, ch.charCodeAt(0)];
+    else if (SYMBOL_KEYS[ch]) [code, keyCode, shiftKey] = SYMBOL_KEYS[ch];
+    return { key: ch, code, keyCode, which: keyCode, shiftKey, bubbles: true, cancelable: true, composed: true };
   }
 
   function pointerClick(el) {
@@ -456,7 +470,7 @@
       const init = keyInit(ch);
       const down = target.dispatchEvent(new win.KeyboardEvent("keydown", init));
       if (down) {
-        const press = target.dispatchEvent(new win.KeyboardEvent("keypress", { ...init, charCode: ch.charCodeAt(0) }));
+        const press = target.dispatchEvent(new win.KeyboardEvent("keypress", { ...init, charCode: ch.charCodeAt(0), keyCode: ch.charCodeAt(0), which: ch.charCodeAt(0) }));
         if (press) doc.execCommand("insertText", false, ch);
       }
       target.dispatchEvent(new win.KeyboardEvent("keyup", init));
