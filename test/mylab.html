@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>MyLab player test</title>
+  <style>
+    body { font: 13px/1.5 system-ui, sans-serif; margin: 0; background: #f3f3f3; }
+    .bar { padding: 10px 24px; background: #1d3b5a; color: #fff; font-weight: 600; }
+    iframe { display: block; width: 100%; height: 560px; border: 0; background: #fff; }
+  </style>
+  <script src="mock-chrome.js"></script>
+  <script>
+    // The "model": answers by MyLab ids, the way the MyLab prompt asks (a letter for M1, keys for S1).
+    window.__mockSolve = (snap) => {
+      const tagsWhere = (re) => [...snap.matchAll(/¶([\w-]+) ([^\n]*)/g)].filter((m) => re.test(m[2])).map((m) => m[1]);
+      const group = snap.match(/\[\[CHOICES id=([\w-]+)/)?.[1];
+      const box = snap.match(/\[\[MATHFIELD id=([\w-]+-S1)/)?.[1];
+      return [
+        {
+          question: "First four terms of Σ (8/3ⁿ + 3/4ⁿ)",
+          question_refs: tagsWhere(/Write out the first four terms|∑|Choose the correct choice/),
+          answer: "A",
+          steps: "Plug in n = 0, 1, 2, 3.",
+          fills: [{ id: group, value: "A" }],
+        },
+        {
+          question: "Sum of the series",
+          question_refs: tagsWhere(/Find the sum of the series/),
+          answer: "16",
+          steps: "8·3/2 + 3·4/3 = 12 + 4 = 16",
+          fills: [{ id: box, value: "16" }],
+        },
+      ];
+    };
+  </script>
+</head>
+<body>
+  <div class="bar">Player.aspx</div>
+  <iframe src="mylab-frame.html" title="Question"></iframe>
+  <script src="../extension/keys.js"></script><script src="../extension/content.js"></script>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Question frame</title>
+  <style>
+    body { font: 13px/1.5 system-ui, sans-serif; margin: 0; background: #fff; color: #222; }
+    .pane { padding: 14px 24px; border-bottom: 1px solid #ddd; }
+    .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+    .eqAccessibleLabel { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+    .eqDivide { display: inline-flex; flex-direction: column; vertical-align: middle; text-align: center; margin: 0 2px; }
+    .eqNumerator { border-bottom: 1px solid currentColor; }
+    .eqDocument { display: inline-block; }
+    .equation.eqEditor .eqDocument { min-width: 90px; min-height: 22px; border: 1px solid #999; border-radius: 3px; padding: 0 4px; vertical-align: middle; }
+    .hiddenInputContainer input { position: absolute; width: 1px; height: 1px; opacity: 0; border: 0; padding: 0; }
+    ul.choices { list-style: none; padding: 0; margin: 6px 0; }
+    li[role=radio] { padding: 4px 8px 4px 28px; position: relative; cursor: pointer; border-radius: 4px; }
+    li[role=radio]::before { content: ""; position: absolute; left: 8px; top: 9px; width: 12px; height: 12px; border: 1px solid #666; border-radius: 50%; }
+    li[role=radio][aria-checked=true]::before { background: radial-gradient(#1d3b5a 45%, transparent 50%); }
+  </style>
+  <script src="mock-chrome.js"></script>
+</head>
+<body>
+  <div class="pane">
+<div class="contentHolder" id="contentHoldertop"><span class="step" id="steppart1"><h5 class="sr-only" tabindex="-1" id="part1">Part 1</h5><div class="rvParagraph pNormal addblank" style="font-size:13px"><span class="rvTxt fNormal">Find a formula for the nth partial sum of the series and use it to find the<span class="wbr">&ZeroWidthSpace;</span><span class="nowrap"> series'</span> sum if the series converges.</span></div><div class="rvParagraph pNormal_1" style="font-size:13px"><span class="equation eqLabel assessments-components-0-1-2 fNormal" id="xl_eqeditor_EqLabel_0" aria-label="StartFraction 11 Over 1  times  2 EndFraction plus StartFraction 11 Over 2  times  3 EndFraction plus StartFraction 11 Over 3  times  4 EndFraction plus midline ellipsis plus StartFraction 11 Over n left parenthesis n plus 1 right parenthesis EndFraction plus midline ellipsis"><span class="eqAccessibleLabel">StartFraction 11 Over 1 times 2 EndFraction plus …</span><span class="eqDocument" aria-hidden="true" role="presentation"><span class="eqDivide"><span class="eqRow eqNumerator"><span class="txtNum eqText"><span>1</span><span>1</span></span></span><span class="eqRow eqDenominator"><span class="txtNum eqText"><span>1</span></span><span class="eqOp"><span>•</span></span><span class="txtNum eqText"><span>2</span></span></span></span><span class="opPlus eqOp"><span>+</span></span><span class="eqDivide"><span class="eqRow eqNumerator"><span class="txtNum eqText"><span>1</span><span>1</span></span></span><span class="eqRow eqDenominator"><span class="txtNum eqText"><span>2</span></span><span class="eqOp"><span>•</span></span><span class="txtNum eqText"><span>3</span></span></span></span><span class="opPlus eqOp"><span>+</span></span><span class="eqMathBB noitalic">⋯</span><span class="opPlus eqOp"><span>+</span></span><span class="eqDivide"><span class="eqRow eqNumerator"><span class="txtNum eqText"><span>1</span><span>1</span></span></span><span class="eqRow eqDenominator"><span class="eqText"><span>n</span></span><span class="eqParen">(</span><span class="eqText"><span>n</span></span><span class="opPlus eqOp"><span>+</span></span><span class="txtNum eqText"><span>1</span></span><span class="eqParen">)</span></span></span><span class="opPlus eqOp"><span>+</span></span><span class="eqMathBB noitalic">⋯</span></span></span></div></span></div>
+  </div>
+
+  <div class="pane">
+    <div class="rvParagraph"><span class="rvTxt fNormal">Write a formula for the nth partial sum. <span id="S1_label">S<sub>n</sub> =</span></span>
+      <span class="equation eqEditor inputField fNormal" id="S1" widgetid="S1" aria-label="enter your response here"><span class="hiddenInputContainer"><input type="text" class="focusNode" aria-label="enter your response here" aria-labelledby="S1_label"></span><span class="eqAccessibleLabel">enter your response here</span><span class="eqDocument empty current" aria-hidden="true" role="presentation"><span class="eqCaret blink"> </span></span></span>
+    </div>
+  </div>
+
+  <div class="pane">
+    <div class="rvParagraph">Does the series converge or diverge? Select the correct choice and, if necessary, fill in the answer box.</div>
+    <ul class="choices" role="radiogroup">
+      <li role="radio" aria-checked="false" tabindex="0">A. The series converges to
+        <span class="equation eqEditor inputField fNormal" id="S2" widgetid="S2" aria-label="enter your response here"><span class="hiddenInputContainer"><input type="text" class="focusNode" aria-label="enter your response here"></span><span class="eqAccessibleLabel">enter your response here</span><span class="eqDocument empty current" aria-hidden="true" role="presentation"><span class="eqCaret blink"> </span></span></span>.
+      </li>
+      <li role="radio" aria-checked="false" tabindex="-1">B. The series diverges.</li>
+    </ul>
+  </div>
+
+  <script>
+    // Stand-in for the real editor: draws keystrokes from the focusNode.
+    document.querySelectorAll(".eqEditor").forEach((w) => {
+      const input = w.querySelector(".focusNode");
+      const docEl = w.querySelector(".eqDocument");
+      w.addEventListener("pointerdown", () => setTimeout(() => input.focus()));
+      input.addEventListener("keydown", (e) => {
+        if (e.key.length !== 1) return;
+        e.preventDefault();
+        docEl.classList.remove("empty");
+        docEl.querySelector(".eqCaret").before(e.key);
+      });
+    });
+    // Radio group: click selects one option.
+    document.querySelectorAll("[role=radiogroup]").forEach((g) => {
+      g.addEventListener("click", (e) => {
+        const opt = e.target.closest("[role=radio]");
+        if (!opt) return;
+        g.querySelectorAll("[role=radio]").forEach((o) => o.setAttribute("aria-checked", String(o === opt)));
+      });
+    });
+  </script>
+  <script src="../extension/keys.js"></script><script src="../extension/content.js"></script>
+</body>
+</html>

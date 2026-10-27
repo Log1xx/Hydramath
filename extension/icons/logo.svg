@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 128 128">
+  <defs>
+    <linearGradient id="tile" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3b3b41"/>
+      <stop offset=".55" stop-color="#1a1a1e"/>
+      <stop offset="1" stop-color="#08080a"/>
+    </linearGradient>
+    <linearGradient id="gloss" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fff" stop-opacity=".16"/>
+      <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="rim" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fff" stop-opacity=".28"/>
+      <stop offset=".4" stop-color="#fff" stop-opacity=".04"/>
+      <stop offset="1" stop-color="#000" stop-opacity=".6"/>
+    </linearGradient>
+    <linearGradient id="face" gradientUnits="userSpaceOnUse" x1="0" y1="24" x2="0" y2="100">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset=".5" stop-color="#e9e9ee"/>
+      <stop offset="1" stop-color="#a9a9b2"/>
+    </linearGradient>
+    <linearGradient id="side" gradientUnits="userSpaceOnUse" x1="0" y1="24" x2="0" y2="104">
+      <stop offset="0" stop-color="#8a8a93"/>
+      <stop offset="1" stop-color="#3e3e45"/>
+    </linearGradient>
+    <filter id="drop" x="-30%" y="-30%" width="160%" height="170%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="3.5"/>
+      <feOffset dy="6"/>
+      <feComponentTransfer><feFuncA type="linear" slope=".75"/></feComponentTransfer>
+      <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <g id="sig">
+      <path d="M84 32H38l25 30-25 30h46" fill="none" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M100 20c1.6 7.4 3.6 9.4 11 11-7.4 1.6-9.4 3.6-11 11-1.6-7.4-3.6-9.4-11-11 7.4-1.6 9.4-3.6 11-11z" stroke-width="2.5" stroke-linejoin="round"/>
+    </g>
+  </defs>
+  <rect width="128" height="128" rx="30" fill="url(#tile)"/>
+  <rect x="4" y="3" width="120" height="62" rx="27" fill="url(#gloss)"/>
+  <rect x=".75" y=".75" width="126.5" height="126.5" rx="29.25" fill="none" stroke="url(#rim)" stroke-width="1.5"/>
+  <!-- The mark (sigma + spark) is shifted so its visible bounds sit in the middle of the tile. -->
+  <g transform="translate(-7.5 2)">
+  <!-- Extruded side: stacked copies stepping down, then the lit face on top. -->
+  <g filter="url(#drop)">
+    <g stroke="url(#side)" fill="url(#side)">
+      <use xlink:href="#sig" y="6"/><use xlink:href="#sig" y="5"/><use xlink:href="#sig" y="4"/>
+      <use xlink:href="#sig" y="3"/><use xlink:href="#sig" y="2"/><use xlink:href="#sig" y="1"/>
+    </g>
+    <g stroke="url(#face)" fill="url(#face)"><use xlink:href="#sig"/></g>
+  </g>
+  <!-- Thin specular edge along the top of the face. -->
+  <path d="M84 30.5H38" stroke="#fff" stroke-opacity=".9" stroke-width="2" stroke-linecap="round" transform="translate(0 -4.5)"/>
+  </g>
+</svg>

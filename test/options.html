@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Settings harness</title>
+  <script src="mock-chrome.js"></script>
+</head>
+<body>
+  <script>
+    // Loads the real settings page into this document, then its scripts, with the mock in place.
+    if (new URLSearchParams(location.search).has("embedded")) document.documentElement.classList.add("embedded");
+    (async () => {
+      const html = await (await fetch("../extension/options.html")).text();
+      const doc = new DOMParser().parseFromString(html, "text/html");
+      document.head.append(...doc.head.querySelectorAll("style"));
+      document.title = doc.title;
+      document.body.innerHTML = doc.body.innerHTML.replace(/<script[^>]*><\/script>/g, "");
+      for (const src of ["../extension/keys.js", "../extension/options.js"]) {
+        await new Promise((r) => document.body.append(Object.assign(document.createElement("script"), { src, onload: r })));
+      }
+    })();
+  </script>
+</body>
+</html>

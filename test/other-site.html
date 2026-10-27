@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Some other site</title>
+</head>
+<body>
+  <!-- No mock and no test opt-in: like any non-MyLab site, the content script should stop at once. -->
+  <p>What is 2 + 3? <input id="a"></p>
+  <script>window.__errors = []; addEventListener("error", (e) => window.__errors.push(e.message));</script>
+  <script src="../extension/keys.js"></script>
+  <script src="../extension/content.js"></script>
+</body>
+</html>

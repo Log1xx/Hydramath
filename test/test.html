@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Hydramath test page</title>
+  <style>
+    body { font: 16px/1.6 system-ui, sans-serif; max-width: 720px; margin: 40px auto; padding: 0 16px; background: #fff; color: #222; }
+    .q { border: 1px solid #ddd; border-radius: 8px; padding: 12px 16px; margin: 12px 0; }
+    .sr { position: absolute; opacity: 0; }
+  </style>
+  <script src="mock-chrome.js"></script>
+  <script>
+    // The "model": answers each field in document order (top frame first, then the iframe).
+    window.__mockSolve = (snap) => {
+      const ids = [...snap.matchAll(/\[\[(?:INPUT|SELECT|CHOICE|MATHFIELD) id=([\w-]+)/g)].map((m) => m[1]);
+      return [
+        { question: "What is 2 + 3?", answer: "5", steps: "2 + 3 = 5", fills: [{ id: ids[0], value: "5" }] },
+        { question: "1/2 + 1/4", answer: "3/4", steps: "2/4 + 1/4 = 3/4", fills: [{ id: ids[1], value: "3/4" }] },
+        { question: "Solve 2x + 1 = 9", answer: "x = 4", steps: "2x = 8, x = 4", fills: [{ id: ids[2], value: "x = 4" }] },
+        { question: "Is 7 × 6 even or odd?", answer: "Even", steps: "42 is even", fills: [{ id: ids[3], value: "Even" }] },
+        { question: "Which is prime? 9, 11, 15", answer: "11", steps: "11 has no divisors but 1 and itself", fills: [{ id: ids[5], value: "true" }] },
+        { question: "3 × 4 (React field)", answer: "12", steps: "3 × 4 = 12", fills: [{ id: ids[7], value: "12" }] },
+        { question: "Simplify 6/8 (equation widget, keydown)", answer: "3/4", steps: "6/8 = 3/4", fills: [{ id: ids[8], value: "3/4" }] },
+        { question: "x² + 3x (equation widget, input)", answer: "x^2+3x", steps: "as given", fills: [{ id: ids[9], value: "x^2→+3x" }] },
+        { question: "5/10 simplified (trusted-only widget)", answer: "1/2", steps: "5/10 = 1/2", fills: [{ id: ids[10], value: "1/2" }] },
+        { question: "10 − 3 (iframe)", answer: "7", steps: "10 − 3 = 7", fills: [{ id: ids[11], value: "7" }] },
+      ];
+    };
+    // Stand-in for the debugger: deliver the keys to the focused widget as "real" typing.
+    window.__mockTrusted = (text) => {
+      const w = document.activeElement?.closest(".equation");
+      if (!w) return { ok: false, error: "nothing focused" };
+      for (const ch of text) ch === "→" ? w.__right() : w.__put(ch);
+      return { ok: true };
+    };
+  </script>
+</head>
+<body>
+  <h1>Homework set 1</h1>
+  <input type="search" placeholder="Search the course">
+
+  <div class="q">1. What is 2 + 3? <input type="text" id="a1"></div>
+
+  <div class="q">2. Compute
+    <math><mfrac><mn>1</mn><mn>2</mn></mfrac><mo>+</mo><mfrac><mn>1</mn><mn>4</mn></mfrac></math>
+    <label>Answer: <input id="a2"></label>
+  </div>
+
+  <div class="q">3. Solve for x:
+    <span class="katex"><span class="katex-mathml"><math><semantics><mrow></mrow><annotation encoding="application/x-tex">2x + 1 = 9</annotation></semantics></math></span><span class="katex-html" aria-hidden="true">2x+1=9</span></span>
+    <textarea id="a3" rows="1"></textarea>
+  </div>
+
+  <div class="q">4. Is 7 × 6 even or odd?
+    <select id="a4"><option></option><option>Even</option><option>Odd</option></select>
+  </div>
+
+  <div class="q">5. Which number is prime?<br>
+    <label><input type="radio" name="p" value="9" class="sr"> 9</label>
+    <label><input type="radio" name="p" value="11" class="sr" id="a5"> 11</label>
+    <label><input type="radio" name="p" value="15" class="sr"> 15</label>
+  </div>
+
+  <div class="q">6. 3 × 4 = <input type="number" id="a6" data-react></div>
+
+  <div class="q" style="display:none">Hidden: 99 + 1 <input id="hidden"></div>
+
+  <!-- Mimics the Savvas-style equation widget: hidden textarea + drawn eqDocument. -->
+  <div class="q">7. Simplify $\frac{6}{8}$:
+    <span class="equation equator-assessments" id="Ssum" widgetid="Ssum" aria-label="enter your response here" data-mode="keydown">
+      <span class="hiddenInputContainer"><textarea style="position:absolute;width:1px;height:1px;opacity:0;border:0;padding:0"></textarea></span>
+      <span class="eqAccessibleLabel" style="position:absolute;left:-9999px">enter your response here</span>
+      <span class="eqDocument empty current" aria-hidden="true" role="presentation"></span>
+    </span>
+  </div>
+
+  <div class="q">8. Type x² + 3x:
+    <span class="equation equator-assessments" id="Ssum2" widgetid="Ssum2" aria-label="enter your response here" data-mode="input">
+      <span class="hiddenInputContainer"><textarea style="position:absolute;width:1px;height:1px;opacity:0;border:0;padding:0"></textarea></span>
+      <span class="eqAccessibleLabel" style="position:absolute;left:-9999px">enter your response here</span>
+      <span class="eqDocument empty current" aria-hidden="true" role="presentation"></span>
+    </span>
+  </div>
+
+  <iframe srcdoc="<script src='mock-chrome.js'></script><p style='font:16px system-ui'>9. 10 &minus; 3 = <input id='f'></p><script src='../extension/keys.js'></script><script src='../extension/content.js'></script>" style="border:1px solid #ddd;border-radius:8px;width:100%;height:60px"></iframe>
+
+  <!-- Same widget, but like the real site it drops script-made key events. -->
+  <div class="q">10. Simplify 5/10:
+    <span class="equation eqEditor inputField" id="S1" widgetid="S1" aria-label="enter your response here" data-mode="trusted">
+      <span class="hiddenInputContainer"><input type="text" class="focusNode" aria-label="enter your response here" style="position:absolute;width:1px;height:1px;opacity:0;border:0;padding:0"></span>
+      <span class="eqAccessibleLabel" style="position:absolute;left:-9999px">enter your response here</span>
+      <span class="eqDocument empty current" aria-hidden="true" role="presentation"></span>
+    </span>
+  </div>
+
+  <style>.eqDocument { display:inline-block; min-width:90px; min-height:24px; border:1px solid #999; border-radius:4px; padding:0 6px; vertical-align:middle; } sup { font-size:.7em; }</style>
+  <script>
+    // Tiny equation editor: "^" opens an exponent, ArrowRight leaves it; only keystrokes update the drawing.
+    document.querySelectorAll(".equation").forEach((w) => {
+      const ta = w.querySelector("textarea, input");
+      const docEl = w.querySelector(".eqDocument");
+      const state = { base: "", sup: null, after: "" , inSup: false, done: false };
+      const draw = () => {
+        docEl.innerHTML = "";
+        docEl.append(state.base);
+        if (state.sup !== null) { const s = document.createElement("sup"); s.textContent = state.sup; docEl.append(s); }
+        docEl.append(state.after);
+        w.dataset.value = state.base + (state.sup !== null ? `^(${state.sup})` : "") + state.after;
+      };
+      const put = (ch) => {
+        if (ch === "^" && state.sup === null) { state.sup = ""; state.inSup = true; }
+        else if (state.inSup) state.sup += ch;
+        else if (state.sup !== null) state.after += ch;
+        else state.base += ch;
+        draw();
+      };
+      w.__put = put;
+      w.__right = () => (state.inSup = false);
+      w.addEventListener("mousedown", () => setTimeout(() => ta.focus()));
+      ta.addEventListener("keydown", (e) => {
+        if (w.dataset.mode === "trusted") { if (e.isTrusted && e.key.length === 1) put(e.key); return; }
+        if (e.key === "ArrowRight") { state.inSup = false; e.preventDefault(); return; }
+        if (w.dataset.mode === "keydown" && e.key.length === 1) { e.preventDefault(); put(e.key); }
+      });
+      ta.addEventListener("input", () => { if (w.dataset.mode === "input") { for (const ch of ta.value) put(ch); ta.value = ""; } });
+    });
+  </script>
+
+  <script>
+    // Simulate a React-controlled input: track value via the native setter + input event.
+    const r = document.getElementById("a6");
+    window.__reactSeen = null;
+    r.addEventListener("input", () => (window.__reactSeen = r.value));
+  </script>
+  <script src="../extension/keys.js"></script><script src="../extension/content.js"></script>
+</body>
+</html>
