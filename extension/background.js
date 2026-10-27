@@ -42,9 +42,10 @@ Typing into MATHFIELD: the editor builds math from keystrokes. Type plain keys, 
 - e is just "e": "e^x→", "3e^2t→".
 - Infinity: type the word "infinity" (the editor turns it into ∞): "infinity", "-infinity".
 - Theta: "\theta": "2\theta", "cos(\theta)". Other Greek letters the same way ("\alpha"), except pi, which is just "pi".
-- Definite integral (with bounds): "\dinf", the lower bound, "→", the upper bound, "→", the integrand, then the differential: "\dinf0→1→x^2→dx", "\dinf1→infinity→1/x^2→→dx" (one "→" leaves the exponent, the next leaves the denominator).
+- Definite integral (with bounds): "\dint", the lower bound, "→", the upper bound, "→", the integrand, then the differential: "\dint0→1→x^2→dx", "\dint1→infinity→1/x^2→→dx" (one "→" leaves the exponent, the next leaves the denominator).
 - Indefinite integral (no bounds): "\int", the integrand, then the differential: "\intx^2→dx", "\intcos(x)dx".
 - Summation Σ: "\sum", the lower limit, "→", the upper limit, "→", the term: "\sumn=1→infinity→1/n^2→→". The plain word "sum" types the word, not Σ, so never use it for the symbol.
+- Union ∪ is "\cup" and intersection ∩ is "\cap", for example intervals in set notation: "(-infinity,2)\cup(5,infinity)", "A\capB".
 
 Ignore fields that are not answer fields (search boxes, login, comments). If a question has no field, still solve it and leave fills empty. If a screenshot is attached, use it for math that is drawn as an image.`;
 
