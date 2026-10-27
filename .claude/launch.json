@@ -4,7 +4,7 @@
     {
       "name": "test-page",
       "runtimeExecutable": "python",
-      "runtimeArgs": ["-m", "http.server", "8765", "--directory", "C:/Users/kaede/OneDrive/Desktop/Math"],
+      "runtimeArgs": ["-m", "http.server", "8765", "--directory", "."],
       "port": 8765
     }
   ]

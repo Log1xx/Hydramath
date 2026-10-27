@@ -27,7 +27,19 @@ For each math problem on the page:
 1. Solve it carefully. Check your arithmetic.
 2. List the ¶ tags of the paragraphs that state it (instructions and the math, not the answer fields) in question_refs.
 3. Work out which field(s) belong to it. Usually that is the field right after the question, or the fields that follow its sub-parts.
-4. Give each field the value in the form it expects: plain typeable text such as "3/4", "2x+1", "-5", "x=3" for INPUT fields (only digits, ".", "-", "e" for type=number), exactly one listed option for SELECT, "true" for each CHOICE option to select (omit the ones to leave unselected), and for MATHFIELD the exact keys to type, never LaTeX: "3/4", "-12", "2x+5", "x^2" (the editor turns "/" into a fraction and "^" into an exponent). After an exponent or a fraction's denominator the cursor stays inside it, so type "→" (right arrow) to step out before continuing: "x^2→+3x", "1/2→+x". "/" takes only the term just before it as the numerator, so wrap a longer numerator or denominator in parentheses: "(1-r)/(1+r)", "(x+1)/(2x)". Type pi as "pi" (the editor turns it into π): "2pi", "(3pi)/4". Type a square root as "\sqrt", then what goes inside, then "→" to leave the root: "\sqrt2→/2", "3\sqrtx+1→" (everything typed before "→" stays under the root). No other LaTeX. No spaces. Follow any instructions on the page about format, rounding, or units.
+4. Give each field the value in the form it expects: plain typeable text such as "3/4", "2x+1", "-5", "x=3" for INPUT fields (only digits, ".", "-", "e" for type=number), exactly one listed option for SELECT, "true" for each CHOICE option to select (omit the ones to leave unselected), and for MATHFIELD the exact keys to type, following "Typing into MATHFIELD" below. Follow any instructions on the page about format, rounding, or units.
+
+Typing into MATHFIELD: the editor builds math from keystrokes. Type plain keys, no spaces, and none of LaTeX except the commands listed here.
+- "→" is the right-arrow key. Templates (fraction, exponent, root, absolute value) keep the cursor inside them until you type "→", so always type "→" to leave one before typing what comes after it.
+- Fractions: "/" turns the single term just before it into the numerator, and the cursor moves to the denominator. Wrap a longer numerator or denominator in parentheses: "3/4", "(1-r)/(1+r)", "(x+1)/(2x)→+5".
+- Exponents: "^", then the exponent, then "→": "x^2→+3x", "e^-2x→", "2^n+1→" (everything before "→" stays in the exponent).
+- Pi: type "pi" (the editor turns it into π): "2pi", "(3pi)/4".
+- Square root: "\sqrt", the radicand, "→": "\sqrt2→/2", "3\sqrtx+1→".
+- nth root: "\nrt", the index, "→", the radicand, "→": cube root of x is "\nrt3→x→", fourth root of (x+1) is "\nrt4→x+1→".
+- Absolute value: "\abs", the contents, "→": "\absx-2→". Never type "|" bars.
+- Natural log: "ln" with its argument always in parentheses: "ln(x)", "ln(2x+1)". For a log of an absolute value, put the absolute value inside the parentheses: "ln(\absx→)", never "ln|x|". Base-10 log is "log(x)".
+- Trig: lowercase names sin, cos, tan, csc, sec, cot (hyperbolic: sinh, cosh, tanh), argument always in parentheses: "sin(2x)", "cos(6/n→)", "tan(pi/4→)". A power of a trig function goes on the name: "sin^2→(x)" for sin²x. Inverse trig is the -1 power: "sin^-1→(x)", "tan^-1→(x)"; never "arcsin" or "asin".
+- e is just "e": "e^x→", "3e^2t→".
 
 Ignore fields that are not answer fields (search boxes, login, comments). If a question has no field, still solve it and leave fills empty. If a screenshot is attached, use it for math that is drawn as an image.`;
 
