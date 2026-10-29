@@ -557,19 +557,20 @@
       // Ignore whitespace: the blinking caret is a " " span that comes and goes with focus.
       const shown = () => el.textContent.replace(/\s+/g, "");
       const before = shown();
+      // Real keystrokes (through the debugger) first: MyLab's editor takes script-made keys for
+      // digits and symbols but drops letters, so "\sqrt" and "pi" vanished while the rest typed.
       const target = await focusWidget(el);
-      await typeInto(target, value);
+      const res = await chrome.runtime.sendMessage({ type: "trusted-type", text: value });
       await sleep(80);
-      if (shown() === before) {
-        // The editor ignored script-made keys; type for real through the debugger.
-        if ("value" in target) target.value = "";
+      if (!res?.ok) {
+        // No debugger (refused, or another one attached): fall back to script-made keys.
         target.focus({ preventScroll: true });
-        const res = await chrome.runtime.sendMessage({ type: "trusted-type", text: value });
+        await typeInto(target, value);
         await sleep(80);
-        if (!res?.ok || shown() === before) {
-          flash(el, "fail");
-          return false;
-        }
+      }
+      if (shown() === before) {
+        flash(el, "fail");
+        return false;
       }
     }
 

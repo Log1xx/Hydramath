@@ -24,7 +24,7 @@ Settings live inside the panel (⚙ to open, ‹ to go back) and save as you cha
 - Each answer gets a card with the result, the steps, and a **Fill** button. With *Fill answers automatically* on, fields are filled as soon as the answers arrive.
 - Turn on *Include a screenshot* for math drawn as images.
 - While solving, the equations it found get a dashed outline. Afterwards each question is tinted; hover an answer card to light up its question and answer box, or click the card to scroll to it. Turn **Show highlights** off (panel or settings) to remove every outline and tint from the page.
-- Math editors that ignore script-made key presses (e.g. Pearson/Savvas equation boxes) are typed into with real keystrokes through Chrome's debugger API. Chrome briefly shows a "started debugging this browser" bar while it types.
+- Math editors (e.g. Pearson/Savvas equation boxes) are typed into with real keystrokes through Chrome's debugger API, because MyLab's editor drops script-made letter keys (so `\sqrt` and `pi` would vanish). Chrome briefly shows a "started debugging this browser" bar while it types. If the debugger can't attach, it falls back to script-made keys.
 
 ## Shortcuts
 
